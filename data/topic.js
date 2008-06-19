@@ -1,5 +1,5 @@
 core.content.search();
-app.Forum.data.Topic = function(){
+Forum.data.Topic = function(){
     this.name = "";
     this.description = "";
     this.hidden = false;
@@ -17,11 +17,11 @@ app.Forum.data.Topic = function(){
 
 };
 
-app.Forum.data.Topic.prototype.setOrder = function(o) {
+Forum.data.Topic.prototype.setOrder = function(o) {
     this.order = o;
 };
 
-app.Forum.data.Topic.prototype.getAncestors = function() {
+Forum.data.Topic.prototype.getAncestors = function() {
     var i = 0;
     var topicStack = [];
     tempTopic = this;
@@ -32,7 +32,7 @@ app.Forum.data.Topic.prototype.getAncestors = function() {
     return topicStack.reverse();
 };
 
-app.Forum.data.Topic.prototype.getThreadCount = function() {
+Forum.data.Topic.prototype.getThreadCount = function() {
     count = db.forum.threads.find( { topic : this } ).toArray.length;
     subtopics = db.forum.topic.find( { parent : this } );
     for(var i=0; i < subtopics.length; i++) {
@@ -41,16 +41,16 @@ app.Forum.data.Topic.prototype.getThreadCount = function() {
     return count;
 };
 
-app.Forum.data.Topic.prototype.SEARCH_OPTIONS = {
+Forum.data.Topic.prototype.SEARCH_OPTIONS = {
     name: 1,
     description: 1
 };
 
-app.Forum.data.Topic.prototype.getHidden = function(){
+Forum.data.Topic.prototype.getHidden = function(){
     return this.hidden || (this.parent && this.parent.getHidden());
 };
 
-app.Forum.data.Topic.prototype.presave = function(){
+Forum.data.Topic.prototype.presave = function(){
     if ( ! this.description ||
          "null" == this.description )
         this.description = "";
@@ -58,7 +58,7 @@ app.Forum.data.Topic.prototype.presave = function(){
     Search.index(this, this.SEARCH_OPTIONS);
 };
 
-app.Forum.data.Topic.prototype.changeCounts = function(threadCount, postCount){
+Forum.data.Topic.prototype.changeCounts = function(threadCount, postCount){
     var topic = this;
     while(topic){
         topic.postCount += postCount;
@@ -68,7 +68,7 @@ app.Forum.data.Topic.prototype.changeCounts = function(threadCount, postCount){
     db.forum.topics.save(this);
 };
 
-app.Forum.data.Topic.prototype.setParent = function(topic){
+Forum.data.Topic.prototype.setParent = function(topic){
     if(this.parent)
         this.parent.changeCounts(-this.threadCount, -this.postCount);
     if(topic)
@@ -76,17 +76,17 @@ app.Forum.data.Topic.prototype.setParent = function(topic){
     this.parent = topic;
 };
 
-app.Forum.data.Topic.prototype.subtThread = function(postCount){
+Forum.data.Topic.prototype.subtThread = function(postCount){
     this.threadCountJustThis -= 1;
     this.changeCounts(-1, -postCount);
 };
 
-app.Forum.data.Topic.prototype.addThread = function(postCount){
+Forum.data.Topic.prototype.addThread = function(postCount){
     this.threadCountJustThis += 1;
     this.changeCounts(1, postCount);
 };
 
-app.Forum.data.Topic.prototype.recalculateAll = function(){
+Forum.data.Topic.prototype.recalculateAll = function(){
     this.threadCount = 0;
     this.postCount = 0;
     this.threadCountJustThis = 0;
@@ -115,12 +115,12 @@ app.Forum.data.Topic.prototype.recalculateAll = function(){
 
 };
 
-app.Forum.data.Topic.list = function(parent, showHidden){
+Forum.data.Topic.list = function(parent, showHidden){
     var q = {parent: parent};
     if(! showHidden) q.hidden = false;
     return db.forum.topics.find(q).sort({order: 1});
 };
 
 
-db.forum.topics.setConstructor(app.Forum.data.Topic);
+db.forum.topics.setConstructor(Forum.data.Topic);
 db.forum.topics.ensureIndex({order: 1});

@@ -1,17 +1,17 @@
 <%
-app.Forum.data.Topic();
+Forum.data.Topic();
 
 processArgs("topic", "options", "rownum");
 
 var link = "viewtopic?name="+URL.escape_queryargs(topic.name);
-if(topic._id == app.Forum.Controller.specialDeletedID ||
-   topic._id == app.Forum.Controller.specialModeratedID)
+if(topic._id == Forum.Controller.specialDeletedID ||
+   topic._id == Forum.Controller.specialModeratedID)
     link = "viewtopic?id="+topic._id;
 var actions = (options) ? ((options.actions) ? options.actions : []) : [];
 // highlight = search query
-core.app.forum.html.form();
+Forum.root.html.form();
 var highlightfunc = function(txt, arg) { return txt ; };
-if(options && options.highlight) highlightfunc = app.Forum.html.highlight;
+if(options && options.highlight) highlightfunc = Forum.html.highlight;
 var query = (options && options.highlight && options.highlight != "null") ? options.highlight : "";
 
 var count = 1;

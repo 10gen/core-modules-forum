@@ -1,11 +1,11 @@
 <%
-    core.app.forum.html.check_ban();
-if(! app.Forum.Controller.hasPermission(user, "moveTopic")){
+    Forum.root.html.check_ban();
+if(! Forum.Controller.hasPermission(user, "moveTopic")){
     // FIXME: Just fail; this is an AJAX callback
     return null;
 }
 
-core.app.forum.data.topic();
+Forum.root.data.topic();
 var topic = db.forum.topics.findOne({_id : request.topic});
 var target = null;
 var o = request.to;

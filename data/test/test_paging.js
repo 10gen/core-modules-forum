@@ -1,6 +1,6 @@
-core.app.forum.data.paging();
+Forum.root.data.paging();
 
-var Paging = app.Forum.data.Paging;
+var Paging = Forum.data.Paging;
 
 var data = [1, 2, 3, 4, 5];
 

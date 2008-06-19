@@ -7,14 +7,14 @@
     oldprint = print;
 print = function(){};
 
-core.app.forum.html.check_ban();
-core.app.forum.data.thread();
+Forum.root.html.check_ban();
+Forum.root.data.thread();
 core.net.url();
 
 print = oldprint;
 
 if(request.threadId)
-    var thread = app.Forum.data.Thread.findOne({_id: request.threadId});
+    var thread = Forum.data.Thread.findOne({_id: request.threadId});
 var selected = [];
 
 // FIXME: are these all AJAX handlers? If so, don't redirect at all.
@@ -56,7 +56,7 @@ var addPost = function(attr){
 // check that you aren't splitting on the first post, etc.
 
 if(request.action == "delete"){
-    if(! app.Forum.Controller.hasPermission(user, "deletePost"))
+    if(! Forum.Controller.hasPermission(user, "deletePost"))
         return Auth.cookie.reject(request, response);
     subtPost("deleted");
     print([thread.count, thread.getFirstNotDeleted().getID()].join('&'));
@@ -64,20 +64,20 @@ if(request.action == "delete"){
 }
 
 if(request.action == "undelete"){
-    if(! app.Forum.Controller.hasPermission(user, "deletePost"))
+    if(! Forum.Controller.hasPermission(user, "deletePost"))
         return Auth.cookie.reject(request, response);
     addPost("deleted");
-    var canSplit = app.Forum.Controller.hasPermission(user, "splitPost");
-    var canDelete = app.Forum.Controller.hasPermission(user, "deletePost");
-    var canModerate = app.Forum.Controller.hasPermission(user, "moderatePost");
+    var canSplit = Forum.Controller.hasPermission(user, "splitPost");
+    var canDelete = Forum.Controller.hasPermission(user, "deletePost");
+    var canModerate = Forum.Controller.hasPermission(user, "moderatePost");
     print([thread.count, thread.getFirstNotDeleted().getID()].join('&'));
     print('&');
-    app.Forum.html.form.makePostOptions(canSplit, canDelete, canModerate, thread).actions[0](thread.getDescendant(selected[0]));
+    Forum.html.form.makePostOptions(canSplit, canDelete, canModerate, thread).actions[0](thread.getDescendant(selected[0]));
     return;
 }
 
 if(request.action == "moderate"){
-    if(! app.Forum.Controller.hasPermission(user, "moderatePost"))
+    if(! Forum.Controller.hasPermission(user, "moderatePost"))
         return Auth.cookie.reject(request, response);
     subtPost("moderated");
     print([thread.count, thread.getFirstNotDeleted().getID()].join('&'));
@@ -85,46 +85,46 @@ if(request.action == "moderate"){
 }
 
 if(request.action == "unmoderate"){
-    if(! app.Forum.Controller.hasPermission(user, "moderatePost"))
+    if(! Forum.Controller.hasPermission(user, "moderatePost"))
         return Auth.cookie.reject(request, response);
     addPost("moderated");
-    var canSplit = app.Forum.Controller.hasPermission(user, "splitPost");
-    var canDelete = app.Forum.Controller.hasPermission(user, "deletePost");
-    var canModerate = app.Forum.Controller.hasPermission(user, "moderatePost");
+    var canSplit = Forum.Controller.hasPermission(user, "splitPost");
+    var canDelete = Forum.Controller.hasPermission(user, "deletePost");
+    var canModerate = Forum.Controller.hasPermission(user, "moderatePost");
     print([thread.count, thread.getFirstNotDeleted().getID()].join('&'));
     print('&');
-    app.Forum.html.form.makePostOptions(canSplit, canDelete, canModerate, thread).actions[0](thread.getDescendant(selected[0]));
+    Forum.html.form.makePostOptions(canSplit, canDelete, canModerate, thread).actions[0](thread.getDescendant(selected[0]));
     return;
 }
 
 if(request.action == "sticky"){
-    if(! app.Forum.Controller.hasPermission(user, "stickyThread"))
+    if(! Forum.Controller.hasPermission(user, "stickyThread"))
         return Auth.cookie.reject(request, response);
     selected.forEach(function(sel1){
-        var thread = app.Forum.data.Thread.findOne({_id: sel1});
+        var thread = Forum.data.Thread.findOne({_id: sel1});
         thread.pinned = true;
         thread.save();
     });
 }
 
 if(request.action == "unsticky"){
-    if(! app.Forum.Controller.hasPermission(user, "stickyThread"))
+    if(! Forum.Controller.hasPermission(user, "stickyThread"))
         return Auth.cookie.reject(request, response);
     selected.forEach(function(sel1){
-        var thread = app.Forum.data.Thread.findOne({_id: sel1});
+        var thread = Forum.data.Thread.findOne({_id: sel1});
         thread.pinned = false;
         thread.save();
     });
 }
 
 if(request.action == "split"){
-    if(! app.Forum.Controller.hasPermission(user, "movePost")){
+    if(! Forum.Controller.hasPermission(user, "movePost")){
         return Auth.cookie.reject(request, response);
     }
     if(! request.subject)
-        return core.app.forum.post_split(thread, selected);
+        return Forum.root.post_split(thread, selected);
     else {
-        var newthread = new app.Forum.data.Thread();
+        var newthread = new Forum.data.Thread();
         var postid = "";
         if(request.topic){
             newthread.topic = db.forum.topics.findOne( { _id : request.topic });
@@ -165,7 +165,7 @@ if(request.action == "split"){
 }
 
 if(request.action == "edit") {
-    if(! app.Forum.Controller.hasPermission(user, "editThread")){
+    if(! Forum.Controller.hasPermission(user, "editThread")){
         return Auth.cookie.reject(request, response);
     }
     if(request.ttl != "") {
@@ -173,7 +173,7 @@ if(request.action == "edit") {
     }
     closed = (request.closed == "on") ? true : false;
     thread.setClosed(closed);
-    print(app.Forum.Controller.canPost(thread) + "&" + app.Forum.html.form.postForm(true) + "&" + thread.getTitle());
+    print(Forum.Controller.canPost(thread) + "&" + Forum.html.form.postForm(true) + "&" + thread.getTitle());
 
     thread.save();
     return;

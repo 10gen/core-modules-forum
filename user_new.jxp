@@ -1,5 +1,5 @@
 <%
-    core.app.forum.data.pendinguser();
+    Forum.root.data.pendinguser();
 core.user.captcha();
 
 var username = request.username;
@@ -27,9 +27,9 @@ if ( db.users.findOne( { email : email } ) )
     error = "email exists";
 
 if(error){
-    core.app.forum.html.forumheader("Forum | Registration error");
+    Forum.root.html.forumheader("Forum | Registration error");
     print(error);
-    app.Forum.html.form.userform();
+    Forum.html.form.userform();
     htmlfooter();
     return;
 }
@@ -48,7 +48,7 @@ if(! mail){ %>
     return;
 }
 
-p = new app.Forum.data.PendingUser();
+p = new Forum.data.PendingUser();
 p.name = username;
 p.email = email;
 p.password = password;
@@ -76,7 +76,7 @@ m.send( mail );
 
 // Render
 
-core.app.forum.html.forumheader("Forum | Email sent");
+Forum.root.html.forumheader("Forum | Email sent");
 
 %>
 

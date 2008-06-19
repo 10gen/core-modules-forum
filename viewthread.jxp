@@ -1,20 +1,20 @@
 <%
 log.app.forum.info("Running forum.viewthread");
 
-core.app.forum.controller();
+Forum.root.controller();
 
-if(! app.Forum.Controller.hasPermission(user, "viewThreadNonHidden"))
+if(! Forum.Controller.hasPermission(user, "viewThreadNonHidden"))
     return Auth.cookie.reject(request, response);
 
 core.net.url();
-core.app.forum.data.thread();
-core.app.forum.data.topic();
-core.app.forum.html.form();
+Forum.root.data.thread();
+Forum.root.data.topic();
+Forum.root.html.form();
 
-var thread = app.Forum.data.Thread.findOne({_id: request.id});
+var thread = Forum.data.Thread.findOne({_id: request.id});
 
 /* if topic has been deleted but threads within topic have not */
-if(thread.getHidden() && ! app.Forum.Controller.hasPermission(user, "viewTopicHidden"))
+if(thread.getHidden() && ! Forum.Controller.hasPermission(user, "viewTopicHidden"))
     return Auth.cookie.reject(request, response);
 
 
@@ -27,16 +27,16 @@ var titleStr = "";
 var a = thread.topic.getAncestors();
 for(var i=0; i<a.length; i++)
     titleStr += content.HTML.escape(a[i]) + " > ";
-core.app.forum.html.forumheader("Forum | "+titleStr + content.HTML.escape(thread.getTitle()));
+Forum.root.html.forumheader("Forum | "+titleStr + content.HTML.escape(thread.getTitle()));
 
 
 // PERMISSIONS
 // can't post if you don't have permissions, or if we're looking at
 // all the posts deleted from a thread.
-var canPost = app.Forum.Controller.canPost(thread) && thread.commentsEnabled && thread.postable();
-var canSplit = app.Forum.Controller.hasPermission(user, "splitPost");
-var canDelete = app.Forum.Controller.hasPermission(user, "deletePost");
-var canModerate = app.Forum.Controller.hasPermission(user, "moderatePost");
+var canPost = Forum.Controller.canPost(thread) && thread.commentsEnabled && thread.postable();
+var canSplit = Forum.Controller.hasPermission(user, "splitPost");
+var canDelete = Forum.Controller.hasPermission(user, "deletePost");
+var canModerate = Forum.Controller.hasPermission(user, "moderatePost");
 var page = request.page;
 
 var threadClosed = thread.getClosed();
@@ -58,7 +58,7 @@ head.push('<link rel="alternate" type="application/rss+xml" title="'+content.HTM
 <input type="hidden" name="threadId" value="<%= thread._id %>">
 <div class="field">Splitting a thread will move the select and all subsequent posts to a new thread in the chosen topic.</div>
 <div class="field"><label>New Subject</label><input type="text" name="subject" class="text" value="<%= content.HTML.escape(thread.getTitle()) %>"></div>
-<div class="field"><label>Topic</label><%= app.Forum.html.selectify(choices, function(x){ return {name: "topic"}; },
+<div class="field"><label>Topic</label><%= Forum.html.selectify(choices, function(x){ return {name: "topic"}; },
      {select: function(thread, o){ return o._id == thread.topic._id }})(thread) %>
 </div>
 <div class="btns"><input type="button" value="Split" onclick="handleSplitSubmit()" class="button"><input type="button" class="button" value="Cancel" onclick="handleCancel()"></div>
@@ -264,22 +264,22 @@ function toggleHighlight() {
 
 <div class="caption">
 <%
-app.Forum.html.search(thread.topic.name);
+Forum.html.search(thread.topic.name);
 var caption_ar = [];
-if(app.Forum.Controller.hasPermission(user, "editThread")) {
+if(Forum.Controller.hasPermission(user, "editThread")) {
      caption_ar.push('<div class="button" onclick="document.getElementById(\'editThreadDiv\').style.display=\'block\';edit_d.render(document.body);edit_d.show()">Edit Thread</div>');
 }
 if(request.show == "deleted"){
      caption_ar.push('<a href="'+url.removeArg("show")+'"><div class="button">Hide deleted</div></a>');
-} else if(app.Forum.Controller.hasPermission(user, "viewDeleted")){
+} else if(Forum.Controller.hasPermission(user, "viewDeleted")){
      caption_ar.push('<a href="'+url.replaceArg("show", "deleted")+'"><div class="button">Show deleted</div></a>');
 }
 if(request.show == "moderated"){
      caption_ar.push('<a href="'+url.removeArg("show")+'"><div class="button">Hide moderated</div></a>');
-} else if(app.Forum.Controller.hasPermission(user, "viewModerated")){
+} else if(Forum.Controller.hasPermission(user, "viewModerated")){
      caption_ar.push('<a href="'+url.replaceArg("show", "moderated")+'"><div class="button">Show moderated</div></a>');
 }
-if(app.Forum.Controller.hasPermission(user, "editUser")){
+if(Forum.Controller.hasPermission(user, "editUser")){
      caption_ar.push('<a href="user_edit.jxp"><div class="button">Edit Users</div></a>');
 }
 
@@ -293,22 +293,22 @@ print(caption_ar.length > 0 ? caption_ar[caption_ar.length-1] : '');
 
 <div style="clear:left">
 <%
-app.Forum.html.breadcrumb(thread);
+Forum.html.breadcrumb(thread);
 %>
 </div>
 
 <%
 
 replies = thread.getReplies();
-core.app.forum.data.paging();
+Forum.root.data.paging();
 
-paging = new app.Forum.data.Paging(replies, {pageSize: 20, page: page,
+paging = new Forum.data.Paging(replies, {pageSize: 20, page: page,
                                              minWindow: 5},
                                    request);
 replies = paging.slice();
 
 print('<div class="paging">');
-core.app.forum.html.paging(paging);
+Forum.root.html.paging(paging);
 print('</div>');
 
 
@@ -328,7 +328,7 @@ if(thread.getClosed()) {  %>
 
 <%
 if(request.highlight) {
-     app.Forum.html.highlight(content.HTML.escape(thread.getTitle()), request.highlight);
+     Forum.html.highlight(content.HTML.escape(thread.getTitle()), request.highlight);
 }
 else {
      print(content.HTML.escape(thread.getTitle()));
@@ -341,7 +341,7 @@ else {
 
 <%
 var even = false;
-var opts = app.Forum.html.form.makePostOptions(canSplit, canDelete, canModerate, thread);
+var opts = Forum.html.form.makePostOptions(canSplit, canDelete, canModerate, thread);
 opts.even = even;
 replies.forEach(function(reply){
      reply.render(opts, thread.threaded_pieces);
@@ -352,7 +352,7 @@ replies.forEach(function(reply){
 
 <%
 print('<div class="paging">');
-core.app.forum.html.paging(paging);
+Forum.root.html.paging(paging);
 print('</div>');
 %>
 
@@ -392,7 +392,7 @@ function goToNewPost(response) {
 <div id="threadFooter" class="threadFooter" style="clear:right">
 <%
 if(canPost){ %>
-     <% app.Forum.html.form.postForm(); %>
+     <% Forum.html.form.postForm(); %>
      <%
 }
 %>

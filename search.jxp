@@ -54,24 +54,24 @@ function summarize(result, searchterm) {
         return retAr;
 }
 
-core.app.forum.controller();
-core.app.forum.html.forumheader("Forum | Search Results for \""+request.query+"\"");
-core.app.forum.data.thread();
-core.app.forum.html.form();
+Forum.root.controller();
+Forum.root.html.forumheader("Forum | Search Results for \""+request.query+"\"");
+Forum.root.data.thread();
+Forum.root.html.form();
 
 var query = request.query;
 
 threads = Search.search(db.forum.threads, query);
-core.app.forum.data.paging();
-paging = new app.Forum.data.Paging(threads, {pageSize: 20, minWindow: 5},
+Forum.root.data.paging();
+paging = new Forum.data.Paging(threads, {pageSize: 20, minWindow: 5},
                                    request);
 threads = paging.slice();
-core.app.forum.html.paging(paging);
+Forum.root.html.paging(paging);
 
 cursor = Search.search(db.forum.topics, query );
 
 // Search bar
-app.Forum.html.search();
+Forum.html.search();
 
 
 %>
@@ -106,7 +106,7 @@ else{
 if(cursor.length > 0) { %>
     <div class="match_div">
     <%
-    core.app.forum.html.topictable("Matching topics:", null, cursor, null, [], {createThread: false, editUser: false, createTopic: false, thisid: null, highlight: query}); %>
+    Forum.root.html.topictable("Matching topics:", null, cursor, null, [], {createThread: false, editUser: false, createTopic: false, thisid: null, highlight: query}); %>
     </div>
     <%
 }
@@ -124,13 +124,13 @@ if(threads.length > 0){ %>
        <div class="threadbox">
        <div class="title">
             <%
-            var tops = app.Forum.html.topicStack(threads[i].topic);
+            var tops = Forum.html.topicStack(threads[i].topic);
             for(var j=0; j<tops.length; j++) {
                  print('<a href="viewtopic?name='+URL.escape_queryargs(tops[j])+'">'+tops[j]+'</a> &gt; ');
             }
             %>
             <a href="viewtopic?name=<%= URL.escape_queryargs(threads[i].topic.name) %>"><%= threads[i].topic.name %></a> &gt;
-            <a href="viewthread?id=<%= threads[i]._id+"&highlight="+query %>"><%= app.Forum.html.highlight(content.HTML.escape(threads[i].getTitle()), query) %></a>
+            <a href="viewthread?id=<%= threads[i]._id+"&highlight="+query %>"><%= Forum.html.highlight(content.HTML.escape(threads[i].getTitle()), query) %></a>
        </div>
        <%
             var snippets = Search.snippet(threads[i], query, threads[i].SEARCH_WEIGHTS);
@@ -146,7 +146,7 @@ if(threads.length > 0){ %>
                 <%
                 summary = summarize(snippets[j].text, query);
                 for(var k=0; k<summary.length; k++)
-                     print(app.Forum.html.highlight(summary[k], query)+"<br />");
+                     print(Forum.html.highlight(summary[k], query)+"<br />");
                 %>
                 </div>
                 </div>
@@ -172,6 +172,6 @@ else {
 </div>
 <%
 
-core.app.forum.html.paging(paging);
+Forum.root.html.paging(paging);
 htmlfooter();
 %>

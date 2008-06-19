@@ -31,7 +31,7 @@ core.ext.getdefault();
                                  If this is smaller than 2*padding+1, weird things might happen!
 */
 
-app.Forum.data.Paging = function(ary, config, request){
+Forum.data.Paging = function(ary, config, request){
     // one-based
     config = config || {};
     request = request || {};
@@ -50,16 +50,16 @@ app.Forum.data.Paging = function(ary, config, request){
     this.displayOpts = Ext.getdefault(config, 'displayOpts', {});
 };
 
-app.Forum.data.Paging.prototype.numPages = function(){
+Forum.data.Paging.prototype.numPages = function(){
     return this._numPages;
 };
 
-app.Forum.data.Paging.prototype.pageNumber = function(){
+Forum.data.Paging.prototype.pageNumber = function(){
     // 1-based?
     return this.page;
 };
 
-app.Forum.data.Paging.prototype.slice = function(){
+Forum.data.Paging.prototype.slice = function(){
     ary = [];
     // zero-based
     var pagez = this.page - 1;
@@ -70,8 +70,8 @@ app.Forum.data.Paging.prototype.slice = function(){
     return ary;
 };
 
-app.Forum.data.Paging.prototype.getWindow = function(){
-    return new app.Forum.data.Paging.Window(this, this.page, this.padding);
+Forum.data.Paging.prototype.getWindow = function(){
+    return new Forum.data.Paging.Window(this, this.page, this.padding);
 };
 
 // A Window is just a range of pages.
@@ -81,7 +81,7 @@ app.Forum.data.Paging.prototype.getWindow = function(){
 * @param page is the page number you're currently on.
 * @param padding is the amount to extend the window in either direction.
 */
-app.Forum.data.Paging.Window = function(pager, page, padding){
+Forum.data.Paging.Window = function(pager, page, padding){
     padding = padding || 0;
     this.first = page-padding;
     if(this.first < 1) this.first = 1;
@@ -109,10 +109,10 @@ app.Forum.data.Paging.Window = function(pager, page, padding){
     }
 };
 
-app.Forum.data.Paging.Window.prototype.getFirstPage = function(){
+Forum.data.Paging.Window.prototype.getFirstPage = function(){
     return this.first;
 };
 
-app.Forum.data.Paging.Window.prototype.getLastPage = function(){
+Forum.data.Paging.Window.prototype.getLastPage = function(){
     return this.last;
 };

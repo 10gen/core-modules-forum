@@ -1,22 +1,22 @@
 <%
-    core.app.forum.html.check_ban();
-if(! app.Forum.Controller.hasPermission(user, "moveThread")){
+    Forum.root.html.check_ban();
+if(! Forum.Controller.hasPermission(user, "moveThread")){
     // FIXME: Just fail; this is an AJAX callback
     return null;
 }
 
-var thread = app.Forum.data.Thread.findOne({_id : request.thread});
+var thread = Forum.data.Thread.findOne({_id : request.thread});
 var topic = null;
 var o = request.to;
-if(o != app.Forum.Controller.specialDeletedID.toString() &&
-   o != app.Forum.Controller.specialModeratedID.toString())
+if(o != Forum.Controller.specialDeletedID.toString() &&
+   o != Forum.Controller.specialModeratedID.toString())
     topic = db.forum.topics.findOne({_id : request.to});
 else {
     // FIXME: wait until Eliot fixes the ObjectId toString method
-    if(o == app.Forum.Controller.specialDeletedID.toString())
-        topic = app.Forum.Controller.specialDeletedID;
+    if(o == Forum.Controller.specialDeletedID.toString())
+        topic = Forum.Controller.specialDeletedID;
     else
-        topic = app.Forum.Controller.specialModeratedID;
+        topic = Forum.Controller.specialModeratedID;
 }
 
 if((typeof topic == "object") && thread.topic._id == topic._id){

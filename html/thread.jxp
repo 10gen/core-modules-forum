@@ -3,7 +3,7 @@
 // This is used in viewtopic, to display all the threads in a topic.
 // In other words, displaying a thread here means displaying a summary,
 // rather than showing all the posts.
-core.app.forum.data.thread();
+Forum.root.data.thread();
 
 // t is the thread to show.
 var t = arguments[0];

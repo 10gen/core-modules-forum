@@ -1,12 +1,12 @@
 <%
-core.app.forum.controller();
+Forum.root.controller();
 
-if(! app.Forum.Controller.hasPermission(user, "createThread"))
+if(! Forum.Controller.hasPermission(user, "createThread"))
     return Auth.cookie.reject(request, response);
 
-core.app.forum.html.forumheader("Forum | New Thread");
+Forum.root.html.forumheader("Forum | New Thread");
 
-core.app.forum.data.thread();
+Forum.root.data.thread();
 core.content.forms();
 var topic = db.forum.topics.findOne({_id: request.top_id});
 if(topic.allowPosts == false){ %>
@@ -15,7 +15,7 @@ if(topic.allowPosts == false){ %>
 }
 else {
     if(request.getMethod() == "POST"){
-        var thread = new app.Forum.data.Thread();
+        var thread = new Forum.data.Thread();
         var rep = thread.decoratorsHandle();
 
         if(rep){
@@ -34,13 +34,13 @@ else {
         }
     }
 
-    core.app.forum.html.form();
-    app.Forum.html.search();
+    Forum.root.html.form();
+    Forum.html.search();
     %>
 
     <h2>New Thread</h2>
 
-        <% app.Forum.html.breadcrumb({topic: topic, getTitle: function(){ return "New thread"; } }); %>
+        <% Forum.html.breadcrumb({topic: topic, getTitle: function(){ return "New thread"; } }); %>
 
     <div id="threadFooter" class="threadFooter" style="clear:right">
          <div class="postForm" id="postForm">

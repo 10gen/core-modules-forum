@@ -9,8 +9,8 @@
 // a DBCursor.
 processArgs("name", "description", "subs", "threads", "actions", "opts");
 core.ext.getdefault();
-core.app.forum.js.yui();
-core.app.forum.html.form();
+Forum.root.js.yui();
+Forum.root.html.form();
 
 opts = opts || {};
 var createThread = true;
@@ -33,11 +33,11 @@ var paging = Ext.getdefault(opts, "paging", true);
 
 // We implement some actions here because we use them in both index and
 // viewtopic.
-var moveThread = app.Forum.Controller.hasPermission(user, "moveThread");
-var moveTopic = app.Forum.Controller.hasPermission(user, "moveTopic");
-var hideTopic = app.Forum.Controller.hasPermission(user, "hideTopic");
-var deleteThread = app.Forum.Controller.hasPermission(user, "deleteThread");
-var moderateThread = app.Forum.Controller.hasPermission(user, "moderateThread");
+var moveThread = Forum.Controller.hasPermission(user, "moveThread");
+var moveTopic = Forum.Controller.hasPermission(user, "moveTopic");
+var hideTopic = Forum.Controller.hasPermission(user, "hideTopic");
+var deleteThread = Forum.Controller.hasPermission(user, "deleteThread");
+var moderateThread = Forum.Controller.hasPermission(user, "moderateThread");
 
 
 var topics = db.forum.topics.find({parent: null}).toArray();
@@ -49,14 +49,14 @@ t = topic || topics[0];
 if(hideTopic){
     topicActions.push({title: "Hidden",
                        func: function(topic){
-                           app.Forum.html.form.hidden(topic, function(t) { if(parseInt(t._id.toString()) < 10) return true; } );
+                           Forum.html.form.hidden(topic, function(t) { if(parseInt(t._id.toString()) < 10) return true; } );
                            return "";
                        }});
 }
 
 if(moveTopic){
     topicActions.push({title : "Move Topic",
-                       func : app.Forum.html.selectify(topics,
+                       func : Forum.html.selectify(topics,
                                                        function(t){ return {onChange: "moveDlg('Topic', moveTopic, '"+t._id+"')", id: t._id.toString()}; },
                                         {filter: function(t, option) { return t._id != option._id; } } ).wrap(function(proceed, t){
                                             // We wrap the function so that when we get the Special Topics,
@@ -71,13 +71,13 @@ if(moveTopic){
 
 var movetargets = [];
 
-if(app.Forum.Controller.hasPermission(user, "moveThread")){
+if(Forum.Controller.hasPermission(user, "moveThread")){
     var topics = db.forum.topics.find({parent: null});
     topics = topics.toArray();
     movetargets = movetargets.concat(topics);
 }
 
-if(addActions && app.Forum.Controller.hasPermission(user, "edPickThread")) {
+if(addActions && Forum.Controller.hasPermission(user, "edPickThread")) {
    actions.push({ title : "Editor's Pick",
                   func : function(thread) {
       editorPick(thread);
@@ -86,18 +86,18 @@ if(addActions && app.Forum.Controller.hasPermission(user, "edPickThread")) {
 }
 
 
-deleteThread = app.Forum.Controller.hasPermission(user, "deleteThread");
-moderateThread = app.Forum.Controller.hasPermission(user, "moderateThread");
+deleteThread = Forum.Controller.hasPermission(user, "deleteThread");
+moderateThread = Forum.Controller.hasPermission(user, "moderateThread");
 
 if(deleteThread)
-    movetargets.push({_id: app.Forum.Controller.specialDeletedID, name: "Delete"});
+    movetargets.push({_id: Forum.Controller.specialDeletedID, name: "Delete"});
 
 if(moderateThread)
-    movetargets.push({_id: app.Forum.Controller.specialModeratedID, name: "Moderate"});
+    movetargets.push({_id: Forum.Controller.specialModeratedID, name: "Moderate"});
 
 if(addActions && movetargets.length > 0) {
     actions.push({title : "Move Thread",
-                  func : app.Forum.html.selectify(movetargets, function(thread){ return {onChange:
+                  func : Forum.html.selectify(movetargets, function(thread){ return {onChange:
                                                                                          "if(this.value != '"+ (topic ? topic._id : "") +"') moveDlg('Thread', move, '"+thread._id+"'); else { alert('You are already in that topic!'); this.value = ''; }", id: thread._id.toString() }; } )
                  });
 }
@@ -415,13 +415,13 @@ if(subs && subs.length > 0){
        <%
        var numrows = 0;
        opts.actions = topicActions;
-       subs.forEach(function(topic){ app.Forum.renderer.topic(topic, opts, ++numrows); });
+       subs.forEach(function(topic){ Forum.renderer.topic(topic, opts, ++numrows); });
        if(numrows > 1) {
             var numcols = 3+topicActions.length-1;
             if(!topic) {
                 numrows-=2;
             }
-            app.Forum.js.addDragAndDrop(tableid, numrows, numcols);
+            Forum.js.addDragAndDrop(tableid, numrows, numcols);
        }
        %>
        <script type="text/javascript">var lastRow = <%= numrows %>;</script>
@@ -433,14 +433,14 @@ if(subs && subs.length > 0){
 if (threads){
 
     if(paging){
-        core.app.forum.data.paging();
-        paging = new app.Forum.data.Paging(threads, {pageSize: 20,
+        Forum.root.data.paging();
+        paging = new Forum.data.Paging(threads, {pageSize: 20,
                                                      minWindow: 5},
                                            request);
         threads = paging.slice();
 
         print('<div class="paging">');
-        core.app.forum.html.paging(paging);
+        Forum.root.html.paging(paging);
         print('</div>');
     }
     %>
@@ -455,7 +455,7 @@ if (threads){
           var even = false;
           if(threads.length > 0)
                threads.forEach( function(t) {
-                    app.Forum.renderer.thread(t, {actions: actions}, even);
+                    Forum.renderer.thread(t, {actions: actions}, even);
                     even = !even;
                });
           else
@@ -464,7 +464,7 @@ if (threads){
 <%
     if(paging){
         print('<div class="paging">');
-        core.app.forum.html.paging(paging);
+        Forum.root.html.paging(paging);
         print('</div>');
     }
 }%>

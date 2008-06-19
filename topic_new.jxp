@@ -1,13 +1,13 @@
 <%
-core.app.forum.controller();
-core.app.forum.data.topic();
+Forum.root.controller();
+Forum.root.data.topic();
 core.content.forms();
 
-if(! app.Forum.Controller.hasPermission(user, "createTopic"))
+if(! Forum.Controller.hasPermission(user, "createTopic"))
     return Auth.cookie.reject(request, response);
 
 var error = "";
-var topic = new app.Forum.data.Topic();
+var topic = new Forum.data.Topic();
 
 if(request.newname){
     var back;
@@ -35,21 +35,21 @@ topics = [{_id: null, name: "(Top Level)"}].concat(topics);
 
 t = topic || topics[0];
 
-var moveTopic = app.Forum.Controller.hasPermission(user, "moveTopic");
-var hideTopic = app.Forum.Controller.hasPermission(user, "hideTopic");
+var moveTopic = Forum.Controller.hasPermission(user, "moveTopic");
+var hideTopic = Forum.Controller.hasPermission(user, "hideTopic");
 
 if(hideTopic){
     topicActions.push({title: "Hidden",
                        func: function(topic){
-                           app.Forum.html.form.hidden(topic);
+                           Forum.html.form.hidden(topic);
                            return "";
                        }});
 }
 
-core.app.forum.html.form();
+Forum.root.html.form();
 if(moveTopic){
     topicActions.push({title : "Move Topic",
-                       func : app.Forum.html.selectify(topics,
+                       func : Forum.html.selectify(topics,
                                                        function(t){ return {onChange: "moveDlg('topic', moveTopic, '"+t._id+"')", id: t._id.toString()};},
                                         {filter: function(t, option) { return t._id != option._id; } } ).wrap(function(proceed, t){
                                             // We wrap the function so that when we get the Special Topics,
@@ -62,7 +62,7 @@ if(moveTopic){
 }
 
 
-        app.Forum.renderer.topic(topic, {actions : topicActions}, 0);
+        Forum.renderer.topic(topic, {actions : topicActions}, 0);
     }
     else {
         print( "This name is already in use." );

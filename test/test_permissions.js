@@ -7,20 +7,20 @@ c = new testing.Client();
 c.setAnswer("output");
 
 var output = c.execute(function(){
-    core.app.forum.index();
+    Forum.root.index();
 });
 
 assert(! (output.match(/onclick="newTopic\(/)));
 
-var output = c.withPermission("core.app.forum.admin", function(){
-    core.app.forum.index();
+var output = c.withPermission("Forum.root.admin", function(){
+    Forum.root.index();
 });
 
 assert(output.match(/onclick="newTopic\(/));
 
 db.forum.banned_ips.save({ip: "127.0.0.1"});
 
-var output = c.execute(core.app.forum.index);
+var output = c.execute(Forum.root.index);
 
 assert(output.match(/You have been banned!/));
 

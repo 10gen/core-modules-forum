@@ -25,10 +25,10 @@ var prettyDate = t.ts.format("MMM d, yyyy h:mm")+t.ts.format("a").toLowerCase();
       <div class="meta">
 <%= t.author.getDisplayName() %>
         <%
-        if(app.Forum.Controller.userPermissionType(t.author) == "ADMIN"){
+        if(Forum.Controller.userPermissionType(t.author) == "ADMIN"){
              print("(administrator)");
         }
-        else if(app.Forum.Controller.userPermissionType(t.author) == "MODERATOR"){
+        else if(Forum.Controller.userPermissionType(t.author) == "MODERATOR"){
              print("(moderator)");
         }
         %>
@@ -38,7 +38,7 @@ var prettyDate = t.ts.format("MMM d, yyyy h:mm")+t.ts.format("a").toLowerCase();
 
     <div class="content">
       <% if(options.highlight) {
-              print(app.Forum.html.highlight(t.content, options.highlight));
+              print(Forum.html.highlight(t.content, options.highlight));
           }
           else {
               print(t.content);

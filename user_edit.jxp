@@ -1,8 +1,8 @@
 <%
-core.app.forum.controller();
+Forum.root.controller();
 
 
-if(! app.Forum.Controller.hasPermission(user, "editUser"))
+if(! Forum.Controller.hasPermission(user, "editUser"))
     return Auth.cookie.reject(request, response);
 
 core.user.user();
@@ -13,12 +13,12 @@ if(request.userid){
     user = db.users.findOne({_id: request.userid});
 }
 
-core.app.forum.data.thread();
+Forum.root.data.thread();
 
 var isBanned = db.forum.banned_users.findOne({user: user});
 
 if(request.action == "Moderate"){
-    app.Forum.data.Thread.find().forEach(function(t){
+    Forum.data.Thread.find().forEach(function(t){
         t.getReplies().forEach(function(p){
             if(p.author._id == user._id){
                 log.debug("moderating " + p.content);
@@ -32,7 +32,7 @@ if(request.action == "Moderate"){
 }
 else if(request.permission){
     // validate the permission we want to set
-    var allowed = Object.values(app.Forum.Controller.permissions);
+    var allowed = Object.values(Forum.Controller.permissions);
     if(allowed.indexOf(request.permission) == -1) throw new Error("I don't want to add that permission");
 
     if(request.block){
@@ -55,9 +55,9 @@ else if(request.permission){
 }
 
 if(user)
-      core.app.forum.html.forumheader("Forum | Edit User "+user.name+" ("+user.nickname+")");
+      Forum.root.html.forumheader("Forum | Edit User "+user.name+" ("+user.nickname+")");
 else
-      core.app.forum.html.forumheader("Forum | Edit User");
+      Forum.root.html.forumheader("Forum | Edit User");
 
 
 %>
@@ -139,9 +139,9 @@ if(! user){ %>
       <td><%= user.name %></div>
       <td>
         <select name="permission">
-          <% var type = app.Forum.Controller.userPermissionType(user);
-             for(var key in app.Forum.Controller.permissions){ %>
-          <option <%= type == key? "selected=\"selected\"" : "" %> value="<%= app.Forum.Controller.permissions[key]%>"><%= key %></option>
+          <% var type = Forum.Controller.userPermissionType(user);
+             for(var key in Forum.Controller.permissions){ %>
+          <option <%= type == key? "selected=\"selected\"" : "" %> value="<%= Forum.Controller.permissions[key]%>"><%= key %></option>
           <% } %>
         </select>
       </td>

@@ -1,6 +1,6 @@
 <%
-core.app.forum.html.check_ban();
-core.app.forum.data.topic();
+Forum.root.html.check_ban();
+Forum.root.data.topic();
 
 // FIXME: permissions?
 core.net.url();
