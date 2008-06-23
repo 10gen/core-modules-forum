@@ -25,7 +25,7 @@ var urls = ['editorPick', 'edpick_rss', 'index', 'moveThread', 'post_new',
     'viewtopic'];
 
 
-Forum.defaultRoot = "/~~/app/forum";
+Forum.defaultRoot = "/~~/modules/forum";
 for(var i = 0; i < urls.length; i++){
     Forum.routes[urls[i]] = Forum.defaultRoot + '/' + urls[i];
 }
