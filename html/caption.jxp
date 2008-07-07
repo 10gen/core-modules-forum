@@ -11,7 +11,11 @@ Forum.html.showCaption = function(createThread, createTopic, parent, editUser) {
         caption_ar.push('<div class="button" onclick="location=\'thread_new?top_id='+parent+'&reply=true\'">New Thread</div>');
     }
     if(createTopic && Forum.Controller.hasPermission(user, "createTopic")) {
-      caption_ar.push('<div class="button" onclick="newTopic('+((parent) ? "'"+ parent+"'" : '') + ')">New Topic</div>');
+        var text = "New Topic";
+        if (parent){
+            text = "New Subtopic";
+        }
+      caption_ar.push('<div class="button" onclick="newTopic('+((parent) ? "'"+ parent+"'" : '') + ')">'+text+'</div>');
       if(parent){
         caption_ar.push('<div class="button" onclick="editTopic(\''+parent+'\')">Edit Topic</div>');
       }
