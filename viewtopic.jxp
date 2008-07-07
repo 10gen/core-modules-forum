@@ -29,7 +29,7 @@ if(request.id){
         name = "Moderated threads";
     }
     t = {name: name, parent: null, getHidden: function(){ return false; } ,
-         getAncestors: function(){ return []; } };
+         getAncestors: function(){ return [name]; } };
 }
 else {
     name = request.name;
@@ -47,11 +47,9 @@ else {
 if(t.getHidden() && ! showHidden)
     return Auth.cookie.reject(request, response);
 
-var titleStr = "";
 var a = t.getAncestors();
-for(var i=0; i<a.length; i++)
-        titleStr += " > " + a[i];
-Forum.root.html.forumheader("Forum |"+titleStr);
+var titleStr = a.join(" > ");
+Forum.root.html.forumheader("Forum | "+titleStr);
 
 
 var actions = [];
