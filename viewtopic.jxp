@@ -73,7 +73,7 @@ if(Forum.Controller.hasPermission(user, "stickyThread")){
 Forum.html.search(t.name);
 
 var createThread = t.allowPosts;
-var createTopic = true;
+var createTopic = request.id != Forum.Controller.specialDeletedID && request.id != Forum.Controller.specialModeratedID;
 var editUser = true;
 Forum.root.html.caption();
 Forum.html.showCaption(createThread, createTopic, t._id, editUser);
