@@ -19,7 +19,7 @@ else {
         topic = Forum.Controller.specialModeratedID;
 }
 
-if((typeof topic == "object") && thread.topic._id == topic._id){
+if((typeof topic == "object" && typeof thread.topic == "object") && thread.topic._id == topic._id){
 %><response>fail</response><%
         return;
 }
@@ -29,7 +29,7 @@ thread.setTopic( topic );
 
 thread.save();
 
-if(typeof topic != "object"){ %>
+if(typeof topic != "object" || typeof oldtopic != "object"){ %>
 <response>null:null</response>
 <% 
     return;
