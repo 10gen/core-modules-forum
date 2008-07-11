@@ -136,9 +136,9 @@ Forum.html.decorateBreadcrumb = function(arr) {
 
 Forum.html.startBreadcrumbTable = function() {
     %>
-    <table id="style1" cellspacing="0" >
+    <table id="style1" style="border:none; margin-top: 5px; " cellspacing="0" >
     <tr>
-    <th scope="col" class="article">
+    <th scope="col" class="article breadcrumbs">
     <div class="top_level"><a href="index.jxp">forums </a></div>
     <%
 }
@@ -264,7 +264,7 @@ Forum.html.form.postForm = function(shouldReturn){
     <div class="postForm" id="postForm">
          <form id="replyform">
          <div class="field">Your Reply: </div><textarea id="ncontent" rows=10 name="ncontent"></textarea>
-         <div class="field"><input type="button" class="button" onclick="post()" value="Submit Your Reply"></div>
+         <div class="field"><input type="button" class="enewsbutton" onclick="post()" value="Submit Your Reply"></div>
          </form>
     </div>
 <%

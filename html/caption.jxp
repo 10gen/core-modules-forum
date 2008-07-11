@@ -8,7 +8,7 @@ Forum.html.showCaption = function(createThread, createTopic, parent, editUser) {
     <%
     var caption_ar = [];
     if(createThread && Forum.Controller.hasPermission(user, "createThread")){
-        caption_ar.push('<div class="button" onclick="location=\'thread_new?top_id='+parent+'&reply=true\'">New Thread</div>');
+        caption_ar.push('<div class="button" onclick="location=\'thread_new?top_id='+parent+'&reply=true\'"><img src="images/button-new-thread.gif" width="100" height="21"></div>');
     }
     if(createTopic && Forum.Controller.hasPermission(user, "createTopic")) {
         var text = "New Topic";

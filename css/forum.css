@@ -52,7 +52,7 @@ td {
 table#style1, table.style1 {
 	margin-bottom: 1em;
 	width: 100%;
-	border: 1px solid #157491;
+	border:1px solid #157491;
 }
 
 #style1 form, .style1 form {
@@ -67,9 +67,13 @@ table#style1, table.style1 {
 	border: 1px solid #ffffff;
 }
 
-#style1 a, .style1 a {
+#style1 a, .style1 a:visited {
 /*	display: block;*/
 	line-height: 1.2em;
+}
+
+#style1 a:hover {
+	text-decoration:underline;
 }
 
 #style1 img, .style img {
@@ -85,12 +89,16 @@ table#style1, table.style1 {
 #style1 th, .style1 th {
 	padding: 7px 6px 5px 12px;
 	font-size: 11px;
-	color: #4f6a72;
+	color: #1d728f;
 	letter-spacing: 2px;
 	text-transform: uppercase;
 	text-align: center;
-	background: #cce5ec url(th_back.gif?v=2);
+	background: #cde5ec url(th_back.gif?v=2);
 	background-repeat: repeat-x;
+}
+
+#style1 th.breadcrumbs, .style1 th.breadcrumbs {
+	background: #fff none;
 }
 
 #style1 th div.top_level, .style1 th div.top_level {
@@ -98,7 +106,7 @@ table#style1, table.style1 {
 	padding: 6px 6px 4px 12px;
 	height: 13px;
 	color: #ffffff;
-	background-color: #369fbf;
+	background-color: #157491;
 	background-repeat: repeat-x;
 }
 
@@ -216,6 +224,7 @@ div.icons {
 }
 div.icons div.edPick, div.icons div.sticky {
      float: left;
+	padding-right: 5px;
 }
 
 
@@ -237,22 +246,20 @@ textarea {
              margin-bottom: 10px;
 }
 input.text {
-           border: 1px solid #9ac0cc;
-           margin-top: -3px;
-           width: 12em;
+		width:145px;
 }
 
 input.submit, input.button {
-             margin: 0px;
-             background-color: #369fbf;
-             color: #ffffff;
-             border: 1px solid white;
+			padding: 2px;
+			background:#157491 none repeat scroll 0% 0%;
+			color:#FFFFFF;
+			font-size:x-small;
 }
 
 div.button {
            cursor: pointer;
-           margin: 0px 1px 10px 3px;
-           padding: 2px 5px 1px;
+           margin: 0px 0 3px;
+           padding: 2px 0 1px 0;
            font-size: 13px;
 }
 div.button:hover {
@@ -444,9 +451,8 @@ table select {
 }
 
 input#search {
-     border: 1px solid #157491;
-     font-size: 11px;
-     padding: 3px;
+ 	font-size:x-small;
+	margin:0pt 2px;
 }
 
 .edpickbreadcrumb {
