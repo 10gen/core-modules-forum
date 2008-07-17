@@ -1,15 +1,10 @@
 <%
 log.app.forum.info("Running forum.viewthread");
 
-Forum.root.controller();
-
 if(! Forum.Controller.hasPermission(user, "viewThreadNonHidden"))
     return Auth.cookie.reject(request, response);
 
 core.net.url();
-Forum.root.data.thread();
-Forum.root.data.topic();
-Forum.root.html.form();
 
 var thread = Forum.data.Thread.findOne({_id: request.id});
 

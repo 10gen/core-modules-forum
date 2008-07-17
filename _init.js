@@ -22,6 +22,10 @@ Forum.root.data.thread();
 core.content.search();
 core.content.html();
 
+core.content.table();
+
+core.util.format();
+
 // routes for forum
 core.core.routes();
 Forum.routes = new Routes();
