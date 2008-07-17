@@ -32,7 +32,7 @@ for(var i = 0; i < urls.length; i++){
     Forum.routes[urls[i]] = Forum.defaultRoot + '/' + urls[i];
 }
 
-Forum.routes.setDefault("index", null);
+Forum.routes.setDefault(Forum.defaultRoot+"/index", null);
 
 Forum.routes.css = new Routes();
 
