@@ -8,15 +8,15 @@ core.net.url();
 
 var thread = Forum.data.Thread.findOne({_id: request.id});
 
-/* if topic has been deleted but threads within topic have not */
-if(thread.getHidden() && ! Forum.Controller.hasPermission(user, "viewTopicHidden"))
-    return Auth.cookie.reject(request, response);
-
-
 if(thread == null){
     print("thread not found");
     return;
 }
+
+/* if topic has been deleted but threads within topic have not */
+if(thread.getHidden() && ! Forum.Controller.hasPermission(user, "viewTopicHidden"))
+    return Auth.cookie.reject(request, response);
+
 
 var titleStr = "";
 var a = thread.topic.getAncestors();

@@ -72,7 +72,7 @@ Forum.data.Thread.prototype.getFirstPost = function(){
 
 Forum.data.Thread.prototype.getFirstNotDeleted = function(){
     var notdeleted = function(p) { if (p.deleted) return false; return true; };
-    var reps = thread.getReplies();
+    var reps = this.getReplies();
 
     for(var i = 0; i < reps.length; i++){
         if(notdeleted(reps[i])){ return reps[i]; }
