@@ -7,7 +7,9 @@ Forum.root = core.modules.forum;
 Forum.renderer = ( allowModule && allowModule.forum && allowModule.forum.renderer) || Forum.root.html;
 
 Forum.root.html.form();
+core.ext.getdefault();
 core.ext.getlist();
+core.user.user();
 core.user.auth();
 Forum.root.controller();
 Forum.root.data.thread();
@@ -57,3 +59,4 @@ for(var i = 0; i < images.length; i++){
     Forum.routes.images[images[i]] = Forum.defaultRoot + '/images/' + images[i];
 }
 
+Forum.getRoutes = function(){ return this.routes; };
