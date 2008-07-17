@@ -14,6 +14,11 @@ core.user.auth();
 Forum.root.controller();
 Forum.root.data.thread();
 Forum.root.data.topic();
+Forum.root.html.form();
+
+Forum.root.data.topic();
+Forum.root.data.thread();
+
 core.content.search();
 core.content.html();
 

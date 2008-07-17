@@ -1,13 +1,7 @@
 <%
-Forum.root.controller();
 Forum.root.html.forumheader("Forum | Home");
-Forum.root.html.form();
-
 if(! Forum.Controller.hasPermission(user, "viewTopicNonHidden"))
     return Auth.cookie.reject(request, response);
-
-Forum.root.data.topic();
-Forum.root.data.thread();
 
 Forum.html.search("forums");
 
