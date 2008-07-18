@@ -62,7 +62,7 @@ for(var i = 0; i < jsfiles.length; i++){
 
 Forum.routes.images = new Routes();
 
-var images = ['feed-icon16x16.png'];
+var images = ['button-new-thread.gif', 'feed-icon16x16.png'];
 
 for(var i = 0; i < images.length; i++){
     Forum.routes.images[images[i]] = Forum.defaultRoot + '/images/' + images[i];
