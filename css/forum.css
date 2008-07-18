@@ -46,7 +46,19 @@ td {
 /*  padding: 0 0 5px 0;*/
 /*  font-size: 12px;*/
 	text-align: right;
-        float: right;
+}
+
+div.breadcrumbs {
+	margin: 1em 1em 1em 0;
+}
+
+div.breadcrumbs a, div.breadcrumbs a:visited {
+	color: #157491;
+	font-size: 13px;
+}
+
+div.breadcrumbs a:hover {
+	text-decoration: underline;
 }
 
 table#style1, table.style1 {
@@ -103,11 +115,8 @@ table#style1, table.style1 {
 
 #style1 th div.top_level, .style1 th div.top_level {
 	float: left;
-	padding: 6px 6px 4px 12px;
-	height: 13px;
-	color: #ffffff;
-	background-color: #157491;
-	background-repeat: repeat-x;
+	color: #157491;
+	text-transform: none;
 }
 
 #style1 th.article, .style1 th.article {
@@ -119,7 +128,8 @@ table#style1, table.style1 {
         background-image: url("th_arrow.gif");
 }
 #style1 th.article div.top_level a, .style1 th.article div.top_level a {
-	color: #ffffff;
+	font-size: 13px;
+	font-weight: normal;
 }
 
 #style1 th.article div.second_level, .style1 th.article div.second_level {
@@ -427,10 +437,8 @@ div.subtopic_link a {
      cursor: pointer;
 }
 h1#forumtitle {
-     display: block;
-     padding-bottom: 10px;
-     padding-top: 20px;
-     margin-bottom: 0px;
+	float: left;
+	margin-top:0;
 }
 h2#threadtitle {
      display: inline;

@@ -63,17 +63,20 @@ if(Forum.Controller.hasPermission(user, "stickyThread")){
       }});
 }
 
-
+print("<div style='float:right; '");
 Forum.html.search(t.name);
+print("</div><h1>Forums</h1>");
 
+Forum.html.topicBreadcrumb(t);
+
+print("<div style='float:right; '");
 var createThread = t.allowPosts;
 var createTopic = request.id != Forum.Controller.specialDeletedID && request.id != Forum.Controller.specialModeratedID;
 var editUser = true;
 Forum.root.html.caption();
 Forum.html.showCaption(createThread, createTopic, t._id, editUser);
+print("</div>");
 
-print("<h1>Forum</h1>");
-Forum.html.topicBreadcrumb(t);
 head.push('<link rel="alternate" type="application/rss+xml" title="'+name+'" href="topic_rss.jxp?id='+t._id+'" />');
 Forum.root.html.topictable(name, description, subs, threadList.toArray(), actions, tableOptions);
 

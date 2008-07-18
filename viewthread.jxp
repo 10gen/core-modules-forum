@@ -257,6 +257,8 @@ function toggleHighlight() {
 
 </script>
 
+<h1 id="forumtitle">Forums</h1>
+
 <div class="caption">
 <%
 Forum.html.search(thread.topic.name);
@@ -283,8 +285,6 @@ for(var i=0; i<caption_ar.length-1; i++)
 print(caption_ar.length > 0 ? caption_ar[caption_ar.length-1] : '');
 %>
 </div>
-
-<h1 id="forumtitle">Forum</h1>
 
 <div style="clear:left; margin:0; padding:0; ">
 <%

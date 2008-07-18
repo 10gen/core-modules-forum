@@ -136,33 +136,29 @@ Forum.html.decorateBreadcrumb = function(arr) {
 
 Forum.html.startBreadcrumbTable = function() {
     %>
-    <table id="style1" style="border:none; margin-top: 5px; " cellspacing="0" >
-    <tr>
-    <th scope="col" class="article breadcrumbs">
-    <div class="top_level"><a href="index.jxp">forums </a></div>
+    <div class="breadcrumbs">
+    <a href="index.jxp">Forums </a> >
     <%
 }
 
 Forum.html.endBreadcrumbTable = function() {
      %>
-     </th>
-     </tr>
-     </table>
+ 	</div>
      <%
 }
 
 Forum.html.topicBreadcrumb = function(topic) {
     Forum.html.startBreadcrumbTable();
     Forum.html.decorateBreadcrumb(Forum.html.topicStack(topic)); %>
-    <img src="css/th_arrow2.gif"><div class="second_level"><%= content.HTML.escape(topic.name) %></div><%
+    <%= content.HTML.escape(topic.name) %><%
     Forum.html.endBreadcrumbTable();
 }
 
 Forum.html.breadcrumb = function(thread) {
     Forum.html.startBreadcrumbTable();
     Forum.html.decorateBreadcrumb(Forum.html.topicStack(thread.topic)); %>
-    <div class="top_level mid_level"><a href="viewtopic?name=<%= URL.escape_queryargs( thread.topic.name )%>"><%= content.HTML.escape(thread.topic.name) %></a></div>
-    <img src="css/th_arrow2.gif"><div class="second_level"><%= content.HTML.escape(thread.getTitle()) %></div><%
+    <a href="viewtopic?name=<%= URL.escape_queryargs( thread.topic.name )%>"><%= content.HTML.escape(thread.topic.name) %></a>
+    > <%= content.HTML.escape(thread.getTitle()) %><%
     Forum.html.endBreadcrumbTable();
 }
 

@@ -1,5 +1,5 @@
 <%
-Forum.root.html.forumheader("Forum | Home");
+Forum.root.html.forumheader("Forums | Home");
 if(! Forum.Controller.hasPermission(user, "viewTopicNonHidden"))
     return Auth.cookie.reject(request, response);
 
