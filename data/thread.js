@@ -1,5 +1,4 @@
 core.content.search();
-core.db.db();
 Forum.data.Thread = function(){
     this.commentsEnabled = true;
     // Whether a thread is "sticky", "pinned", or otherwise. Such threads
@@ -199,6 +198,6 @@ db.forum.threads.ensureIndex({created : -1});
 db.forum.threads.ensureIndex({lastPostTime : -1});
 db.forum.threads.ensureIndex({pinned: 1});
 db.forum.threads.ensureIndex({pinned: 1, lastPostTime: 1});
-core.db.db();
+core.db.dbutil();
 dbutil.associate(Forum.data.Thread, db.forum.threads);
 Search.fixTable(db.forum.threads, Forum.data.Thread.prototype.SEARCH_WEIGHTS);
