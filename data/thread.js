@@ -15,6 +15,10 @@
 */
 
 core.content.search();
+
+/**
+ * Data class for a forum thread.
+ */
 Forum.data.Thread = function(){
     this.commentsEnabled = true;
     // Whether a thread is "sticky", "pinned", or otherwise. Such threads
@@ -56,35 +60,68 @@ Forum.data.Thread.prototype.SEARCH_OPTIONS = {
     }
 };
 
+/**
+ * Presave hook: index this thread.
+ */
 Forum.data.Thread.prototype.presave = function() {
     Search.index( this , this.SEARCH_WEIGHTS, this.SEARCH_OPTIONS );
     Search.addToIndex( this, content.HTML.strip(this.getReplies()[0].title), 0.2);
 };
 
+/**
+ * Get the title for this thread.
+ * @return {string} the title for this thread
+ */
 Forum.data.Thread.prototype.getTitle = function() {
     return this.getFirstPost().title;
 };
 
+/**
+ * Set the title for this thread.
+ * @param {string} title the new title for this thread
+ */
 Forum.data.Thread.prototype.setTitle = function(title){
     this.getFirstPost().title = title;
 };
 
+/**
+ * Set whether this thread is closed, that is, whether comments are disabled
+ * on this thread.
+ * @param {boolean} isClosed true if this thread should be closed
+ */
 Forum.data.Thread.prototype.setClosed = function(isClosed){
     this.commentsEnabled = !isClosed;
 };
 
+/**
+ * Check whether this thread is closed, that is, whether comments are disabled
+ * on this thread.
+ * @return {boolean} true if this thread is closed
+ */
 Forum.data.Thread.prototype.getClosed = function(isClosed){
     return !this.commentsEnabled;
 };
 
+/**
+ * Check whether this thread is hidden.
+ * @return {boolean} true if this thread is hidden
+ */
 Forum.data.Thread.prototype.getHidden = function(){
     return this.topic.getHidden();
 };
 
+/**
+ * Get the first post in this thread.
+ * @return {threaded.Reply} the first post in this thread
+ */
 Forum.data.Thread.prototype.getFirstPost = function(){
     return this.getReplies()[0];
 };
 
+/**
+ * Get the first post in this thread that isn't deleted.
+ * @return {threaded.Reply} the first post in this thread that isn't deleted
+ */
 Forum.data.Thread.prototype.getFirstNotDeleted = function(){
     var notdeleted = function(p) { if (p.deleted) return false; return true; };
     var reps = this.getReplies();
@@ -95,6 +132,10 @@ Forum.data.Thread.prototype.getFirstNotDeleted = function(){
     return null;
 };
 
+/**
+ * Set the topic to which this thread belongs.
+ * @param {Forum.data.Topic} newTopic the topic for this post
+ */
 Forum.data.Thread.prototype.setTopic = function(newTopic) {
     var oldTopic = this.topic;
     if(oldTopic != Forum.Controller.specialDeletedID &&
@@ -107,9 +148,11 @@ Forum.data.Thread.prototype.setTopic = function(newTopic) {
         newTopic.addThread(this.count);
 };
 
+/**
+ * Try to find a post to use for "last post in this thread by..." functionality.
+ * @return {threaded.Reply} the most recent post
+ */
 Forum.data.Thread.prototype.getLatestPost = function() {
-    // Try to find a post to use for "last post in this thread by..."
-    // functionality in html/thread or whatever.
     // Start by seeing if we have a descendant with the ID of
     // this.latestPost. This'll probably work,
     // unless that post was deleted, in which case we'll get a null.
@@ -129,6 +172,11 @@ Forum.data.Thread.prototype.getLatestPost = function() {
     return null;
 }
 
+/**
+ * Modify the post count for this thread. Convenience method for changing
+ * this thread's post count and the post counts for all ancestor topics.
+ * @param {number} num the amount to increase/decrease the post count
+ */
 Forum.data.Thread.prototype.modifyPostCount = function(num){
     this.count += num;
     this.topic.changeCounts(0, num);
@@ -139,6 +187,11 @@ Forum.data.Thread.prototype.modifyPostCount = function(num){
 // this post isn't deleted, or it is one of:
 // the string "deleted"
 // the string "moderated"
+/**
+ * Mark a post as "removed" from the thread.
+ * @param {string} reason a "type" of deletion, either "deleted" or "moderated"
+ * @param {string} comment the comment ID to remove
+ */
 Forum.data.Thread.prototype.removePost = function(reason, desc_id){
     var p = this.getDescendant(desc_id);
     p.deleted = reason;
@@ -159,6 +212,11 @@ Forum.data.Thread.prototype.removePost = function(reason, desc_id){
     this.modifyPostCount(-1);
 };
 
+/**
+ * Un-remove a post from this thread.
+ * @param {string} reason the "type" of deletion to undo: "deleted" or "moderated". If the post wasn't deleted in this way, we ignore the request.
+ * @param {string} comment the comment ID to un-remove
+ */
 Forum.data.Thread.prototype.addPost = function(reason, desc_id){
     var p = this.getDescendant(desc_id);
     if(p.deleted == reason){
@@ -175,6 +233,10 @@ Forum.data.Thread.prototype.addPost = function(reason, desc_id){
     }
 };
 
+/**
+ * Math is hard, so do it over.
+ * Recount the number of non-deleted posts in this thread.
+ */
 Forum.data.Thread.prototype.recalculate = function() {
     var reps = this.getReplies();
     reps = reps.filter(function(r) { return ! r.deleted; });
@@ -182,6 +244,12 @@ Forum.data.Thread.prototype.recalculate = function() {
     this.save();
 };
 
+/**
+ * Check whether this thread is expired.
+ * A site can configure whether a thread expires; expired threads cannot be
+ * posted to.
+ * @return {boolean} true if this thread is expired
+ */
 Forum.data.Thread.prototype.isExpired = function(){
     var days = Ext.getlist(allowModule, 'forum', 'threadExpirationDays');
     if(! days) return false;
@@ -189,6 +257,10 @@ Forum.data.Thread.prototype.isExpired = function(){
     return new Date() > end;
 };
 
+/**
+ * Check whether this thread is accepting comments.
+ * @return {boolean} true if this thread accepts comments
+ */
 Forum.data.Thread.prototype.postable = function(){
     return this.commentsEnabled && ! this.isExpired();
 };
@@ -204,6 +276,11 @@ threaded.repliesEnabled(Forum.data, "Thread",
                          pieces: Forum.root.html
                                                   });
 
+/**
+ * Get all the threads in a certain topic.
+ * @param {Forum.data.Topic} topic the topic to find threads in
+ * @return cursor to threads in the given topic, in sorted order
+ */
 Forum.data.Thread.list = function(topic){
     return db.forum.threads.find({topic: topic}).sort({pinned: -1, lastPostTime: -1});
 };

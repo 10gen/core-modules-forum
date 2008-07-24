@@ -15,18 +15,35 @@
 */
 
 log.app.forum.info("Running forum.controller"+app + Forum);
+/** Master class for the forum.
+ */
 Forum.Controller = {};
 
+/**
+ * Check whether a request or a user is banned.
+ * @return true if they're banned (as a user or as an IP)
+ */
 Forum.Controller.bannedUser = function(user, request){
     if(db.forum.banned_users.findOne({user: user})) return true;
     if(db.forum.banned_ips.findOne({ip: request.getRemoteIP()})) return true;
     return false;
 };
 
+/**
+ * Get the permissions for an "unknown user".
+ * @return a mapping of action name -> true if an unknown user is allowed
+ *   to perform that action
+ */
 Forum.Controller.unknownPermissions = function(){
     return {viewTopicNonHidden: true, viewThreadNonHidden: true};
 };
 
+/**
+ * Get the permissions for a member -- that is, someone who is logged in as a
+ * real user. Includes all permissions for an unknown user.
+ * @return a mapping of action name -> true if a member is allowed to perform
+ *    that action
+ */
 Forum.Controller.memberPermissions = function(){
     var p = {createThread: true,
         makePost: true
@@ -35,6 +52,13 @@ Forum.Controller.memberPermissions = function(){
     return Object.extend(p, Forum.Controller.unknownPermissions());
 };
 
+/**
+ * Get the permissions for a moderator -- that is, someone who was granted
+ * the forum moderator permission. Includes all the permissions for an ordinary
+ * member.
+ * @return a mapping of action name -> true if a moderator is allowed to perform
+ *    that action
+ */
 Forum.Controller.moderatorPermissions = function(){
     var p = {
         moderatePost: true,
@@ -46,6 +70,12 @@ Forum.Controller.moderatorPermissions = function(){
     return Object.extend(p, Forum.Controller.memberPermissions());
 };
 
+/**
+ * Get the permissions for an admin -- that is, someone who has the forum admin
+ * permission. Site admins are "grandfathered" in as forum admins.
+ * @return a mapping of action name -> true if a forum admin is allowed to
+ *    perform that action
+ */
 Forum.Controller.adminPermissions = function(){
     var p = {
         // user stuff
@@ -84,6 +114,13 @@ Forum.Controller.adminPermissions = function(){
 };
 
 globalCachedPermissions = {};
+/**
+ * Check whether a user has the given permission. User permissions are cached
+ * (FIXME: use a timeout cache) so as to minimize database lookups.
+ * @param {User} user a user object
+ * @param {string} perm a forum permission
+ * @return true if the user has that permission
+ */
 Forum.Controller.hasPermission = function(user, perm){
     var id = null;
     if(user == null)
@@ -98,6 +135,11 @@ Forum.Controller.hasPermission = function(user, perm){
     return (perm in globalCachedPermissions[id]);
 };
 
+/**
+ * Look up the permissions for a single user.
+ * @param {User} user a user
+ * @return a mapping of action name -> true if the user can perform this action
+ */
 Forum.Controller.getPermissions = function(user){
     // FIXME: throw an exception if we find a banned user? We should be
     // handling all of these at the page level.
@@ -114,6 +156,11 @@ Forum.Controller.getPermissions = function(user){
     return Forum.Controller[type.toLowerCase()+'Permissions']();
 };
 
+/**
+ * Gets all the posts deleted by a user.
+ * @param {User} user a user
+ * @return a cursor pointing to all posts that were deleted by that user
+ */
 Forum.Controller.getAllPostsDeletedByUser_Query = function(user){
     return db.forum.posts.find({deleted: user});
 };
@@ -122,6 +169,11 @@ Forum.Controller.getAllPostsDeletedByUser_Query = function(user){
 Forum.Controller.specialDeletedID = ObjectId("00000000000000000000001");
 Forum.Controller.specialModeratedID = ObjectId("00000000000000000000002");
 
+/**
+ * The types of permissions we recognize in the forum. These are
+ * "ADMIN", "MODERATOR", "MEMBER", and "UNKNOWN". This mapping holds these and
+ * the corresponding user permissions.
+ */
 Forum.Controller.permissions = {
     ADMIN: "Forum.root.admin",
     MODERATOR: "Forum.root.moderator",
@@ -129,7 +181,12 @@ Forum.Controller.permissions = {
     UNKNOWN: "Forum.root.unknown",
 
 };
-
+/**
+ * Check if a user has all the prerequisites to use the forum.
+ * @param {User} user a user object
+ * @return false if nothing is missing; otherwise return the string for the
+ *   first user permission the user needs
+ */
 Forum.Controller.missingPermission = function(user){
     if(! user) return "account";
 
@@ -143,6 +200,12 @@ Forum.Controller.missingPermission = function(user){
     return false;
 };
 
+/**
+ * Return a descriptive string specifying what kind of permissions a user has.
+ * @see Forum.Controller.permissions
+ * @param {User} user a user object
+ * @return {string} one of the Forum permissions
+ */
 Forum.Controller.userPermissionType = function(user){
     if(! user) return "UNKNOWN";
 
@@ -159,6 +222,12 @@ Forum.Controller.userPermissionType = function(user){
     return "MEMBER";
 };
 
+/**
+ * Check whether the current user can post to a thread.
+ * @param {Forum.data.Thread} thread a thread
+ * @return true if the user has permission to post to this thread and it's OK
+ *   to post to this thread
+ */
 Forum.Controller.canPost = function(thread){
     return Forum.Controller.hasPermission(user, "makePost")
         && thread.commentsEnabled && thread.postable();
