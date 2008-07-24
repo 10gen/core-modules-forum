@@ -15,6 +15,11 @@
 */
 
 core.content.search();
+/**
+ * Data class for a forum topic.
+ * Topics "contain" threads and other topics. This "owning" is done by setting
+ * the "parent" attribute to some other topic.
+ */
 Forum.data.Topic = function(){
     this.name = "";
     this.description = "";
@@ -33,10 +38,20 @@ Forum.data.Topic = function(){
 
 };
 
+/**
+ * Set the order of the topic as an integer. Lower orders come first.
+ * @param {number} o the position for this topic to have
+ */
 Forum.data.Topic.prototype.setOrder = function(o) {
     this.order = o;
 };
 
+/**
+ * Gets the ancestor topics for this topic, topmost first.
+ * In other words: get the root of the topic tree, followed by the child of
+ * the root, and so on until we get to this topic. (Include this topic.)
+ * @return {Array} the ancestors for this topic
+ */
 Forum.data.Topic.prototype.getAncestors = function() {
     var i = 0;
     var topicStack = [];
@@ -48,6 +63,10 @@ Forum.data.Topic.prototype.getAncestors = function() {
     return topicStack.reverse();
 };
 
+/**
+ * Get the number of threads in this topic and all subtopics.
+ * @return {number} the number of threads
+ */
 Forum.data.Topic.prototype.getThreadCount = function() {
     count = db.forum.threads.find( { topic : this } ).toArray.length;
     subtopics = db.forum.topic.find( { parent : this } );
@@ -62,10 +81,18 @@ Forum.data.Topic.prototype.SEARCH_OPTIONS = {
     description: 1
 };
 
+/**
+ * Check whether this topic is hidden. A topic is hidden if it is marked hidden
+ * with its "hidden" attribute, or if its parent is hidden.
+ * @return {boolean} true if this topic is hidden
+ */
 Forum.data.Topic.prototype.getHidden = function(){
     return this.hidden || (this.parent && this.parent.getHidden());
 };
 
+/**
+ * Presave hook for a topic. Index a topic's name and description.
+ */
 Forum.data.Topic.prototype.presave = function(){
     if ( ! this.description ||
          "null" == this.description )
@@ -74,6 +101,12 @@ Forum.data.Topic.prototype.presave = function(){
     Search.index(this, this.SEARCH_OPTIONS);
 };
 
+/**
+ * Modify a topic's thread count and post count. Percolates through the
+ * ancestors of this topic modifying all of their counts too.
+ * @param {number} threadCount the number to increment thread counts by
+ * @param {number} postCount the number to increment post counts by
+ */
 Forum.data.Topic.prototype.changeCounts = function(threadCount, postCount){
     var topic = this;
     while(topic){
@@ -84,6 +117,11 @@ Forum.data.Topic.prototype.changeCounts = function(threadCount, postCount){
     db.forum.topics.save(this);
 };
 
+/**
+ * Set the parent topic for this topic.
+ * Updates thread/post counts correctly.
+ * @param {Forum.data.Topic} a topic
+ */
 Forum.data.Topic.prototype.setParent = function(topic){
     if(this.parent)
         this.parent.changeCounts(-this.threadCount, -this.postCount);
@@ -92,16 +130,32 @@ Forum.data.Topic.prototype.setParent = function(topic){
     this.parent = topic;
 };
 
+/**
+ * "Subtract" a thread from this topic.
+ * Used when a thread is marked as no longer belonging to this topic.
+ * Removes a thread's counts from this topic's counts.
+ * @param {number} postCount the number of posts in the departed thread
+ */
 Forum.data.Topic.prototype.subtThread = function(postCount){
     this.threadCountJustThis -= 1;
     this.changeCounts(-1, -postCount);
 };
 
+/**
+ * "Add" a thread to this topic.
+ * Used when a thread is newly added to this topic.
+ * Add a thread's counts to this topic's counts.
+ * @param {number} postCount the number of posts in the arriving thread
+ */
 Forum.data.Topic.prototype.addThread = function(postCount){
     this.threadCountJustThis += 1;
     this.changeCounts(1, postCount);
 };
 
+/**
+ * Math is hard, so let's redo all of it.
+ * Recalculates the thread and post counts for everything in the forum.
+ */
 Forum.data.Topic.prototype.recalculateAll = function(){
     this.threadCount = 0;
     this.postCount = 0;
@@ -131,6 +185,12 @@ Forum.data.Topic.prototype.recalculateAll = function(){
 
 };
 
+/**
+ * Lists the topics in a parent topic.
+ * @param {Forum.data.Topic} parent the topic whose children we're looking for
+ * @param {boolean} showHidden true if we should return hidden topics
+ * @return a cursor to the topics belonging to the given topic
+ */
 Forum.data.Topic.list = function(parent, showHidden){
     var q = {parent: parent};
     if(! showHidden) q.hidden = false;
