@@ -19,6 +19,12 @@ Forum.js = {};
 
 //FIXME: a post can be moved below deleted/moderated!
 //FIXME2: numcols is, at the moment, a limit.  it should be an array of columns to be made handles
+/**
+ * Send code to the browser to instantiate a forum drag-and-drop widget.
+ * @param {string} tableid the HTML id for the table to enhance
+ * @param {number} numrows the number of rows in the table
+ * @param {number} numcols the number of columns in the table
+ */
 Forum.js.addDragAndDrop = function(tableid, numrows, numcols) {
 
      head.push('<script type="text/javascript" src="/@@/yui/current/yuiloader/yuiloader-beta.js"></script>'+
@@ -196,7 +202,9 @@ Event.onDOMReady(YAHOO.example.DDApp.init, YAHOO.example.DDApp, true);
 <%
 }
 
-
+/**
+ * Send code to the browser to instantiate an invisible Yes/No dialog.
+ */
 Forum.js.addYesNoDialog = function() {
      %>
 

@@ -17,6 +17,21 @@
 <%
 // "caption" is the idiotic name someone gave to all right-aligned buttons and links
     Forum.root.js.yui();
+/**
+ * Generate HTML for the "caption" (the right-aligned buttons and links).
+ * This function checks for the appropriate permissions before creating buttons
+ * and links, but for some pages it isn't appropriate to create some elements,
+ * so it also checks its arguments.
+ *
+ * @param {boolean} createThread whether to create a button which lets the user
+ *   create a thread
+ * @param {boolean} createTopic  whether to create a button which lets the user
+ *   create a subtopic
+ * @param {ObjectId} topic       the topic to refer to when creating new topics
+ *   or editing a topic
+ * @param {boolean} editUser     whether to create a link allowing you to edit
+ *   users
+ */
 Forum.html.showCaption = function(createThread, createTopic, parent, editUser) {
      %>
 

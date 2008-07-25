@@ -14,6 +14,14 @@
 *    limitations under the License.
 */ %>
 
+<%
+/**
+ * Show a nice error screen.
+ * @name Forum.html.error
+ * @param {string} errmsg the error message to show
+ */
+%>
+
 <% htmlheader("Forums | Error"); 
 processArgs("errmsg"); %>
 <div class="error">Error: <%=errmsg%></div>
