@@ -37,7 +37,7 @@ if(thread.getHidden() && ! Forum.Controller.hasPermission(user, "viewTopicHidden
 var titleStr = "";
 var a = thread.topic.getAncestors();
 for(var i=0; i<a.length; i++)
-    titleStr += content.HTML.escape(a[i]) + " > ";
+    titleStr += content.HTML.escape(a[i]) + " &gt; ";
 Forum.root.html.forumheader("Forum | "+titleStr + content.HTML.escape(thread.getTitle()));
 
 

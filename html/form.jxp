@@ -199,7 +199,6 @@ Forum.html.decorateBreadcrumb = function(arr) {
          print('<div class="mid_level top_level"><a href="viewtopic?name='+URL.escape_queryargs(arr[i])+'">'+content.HTML.escape(arr[i])+' </a></div>');
 }
 
-// FIXME: unescaped >
 // unexposed
 /*
  * Render the beginning of the breadcrumb "table", which is actually a div
@@ -207,7 +206,7 @@ Forum.html.decorateBreadcrumb = function(arr) {
 Forum.html.startBreadcrumbTable = function() {
     %>
     <div class="breadcrumbs">
-    <a href="index.jxp">Forums </a> >
+    <a href="index.jxp">Forums </a> &gt;
     <%
 }
 
@@ -237,12 +236,11 @@ Forum.html.topicBreadcrumb = function(topic) {
  * Render the breadcrumbs for a thread.
  * Renders the whole shebang, including the thread.
  */
-// FIXME: unescaped >
 Forum.html.breadcrumb = function(thread) {
     Forum.html.startBreadcrumbTable();
     Forum.html.decorateBreadcrumb(Forum.html.topicStack(thread.topic)); %>
     <a href="viewtopic?name=<%= URL.escape_queryargs( thread.topic.name )%>"><%= content.HTML.escape(thread.topic.name) %></a>
-    > <%= content.HTML.escape(thread.getTitle()) %><%
+    &gt; <%= content.HTML.escape(thread.getTitle()) %><%
     Forum.html.endBreadcrumbTable();
 }
 
