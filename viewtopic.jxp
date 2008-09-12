@@ -32,11 +32,11 @@ var t;
 if(request.id){
     if(request.id == Forum.Controller.specialDeletedID){
         threadList = Forum.data.Thread.list(Forum.Controller.specialDeletedID);
-        name = "Deleted threads";
+        name = "Deleted "+allowModule.forum.threadName.toLowerCase() +"s"; // FIXME: internationalization?
     }
     if(request.id == Forum.Controller.specialModeratedID){
         threadList = Forum.data.Thread.list(Forum.Controller.specialModeratedID);
-        name = "Moderated threads";
+        name = "Moderated "+allowModule.forum.threadName.toLowerCase()+"s";
     }
     t = {name: name, parent: null, getHidden: function(){ return false; } ,
          getAncestors: function(){ return [name]; } };

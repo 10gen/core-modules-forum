@@ -132,7 +132,7 @@ if(cursor.length > 0) { %>
 
 <%
 if(threads.length > 0){ %>
-        <h1>Matching threads:</h1>
+        <h1>Matching <%= allowModule.forum.threadName.toLowerCase() %>s:</h1>
         <%
     for(var i = 0; i < threads.length; i++){
        var starti = i;
@@ -177,7 +177,7 @@ if(threads.length > 0){ %>
 }
 else {
      %>
-     No matches in threads.
+     No matches in <%= allowModule.forum.threadName.toLowerCase() %>s.
      <%
 }
 }

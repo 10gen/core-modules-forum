@@ -27,7 +27,7 @@ htmlheader("Move to?");
       <% }); %>
       <div class="field">
         <div class="field_name">
-          New thread name:
+          New <%= allowModule.forum.threadName.toLowerCase() %> name:
         </div>
         <div class="field_value">
           <input type="text" name="subject" value="<%= content.HTML.escape(thread.getTitle()) %>"
