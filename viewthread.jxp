@@ -25,7 +25,7 @@ core.net.url();
 var thread = Forum.data.Thread.findOne({_id: request.id});
 
 if(thread == null){
-    print("thread not found");
+    print(allowModule.forum.threadName + " not found.");
     return;
 }
 
@@ -62,12 +62,12 @@ head.push('<link rel="alternate" type="application/rss+xml" title="'+content.HTM
 
 
 <div id="splitterDiv" style="display: none;">
-<fieldset class="dlg2"><legend>Create New Thread From Split Posts</legend>
+<fieldset class="dlg2"><legend>Create New <%= allowModule.forum.threadName %> From Split Posts</legend>
 <form id="splitterForm" action="thread_action">
 <input type="hidden" id="split_select" name="select">
 <input type="hidden" name="action" value="split">
 <input type="hidden" name="threadId" value="<%= thread._id %>">
-<div class="field">Splitting a thread will move the select and all subsequent posts to a new thread in the chosen topic.</div>
+<div class="field">Splitting a <%= allowModule.forum.threadName.toLowerCase() %> will move the select and all subsequent posts to a new <%= allowModule.forum.threadName.toLowerCase() %> in the chosen topic.</div>
 <div class="field"><label>New Subject</label><input type="text" name="subject" class="text" value="<%= content.HTML.escape(thread.getTitle()) %>"></div>
 <div class="field"><label>Topic</label><%= Forum.html.selectify(choices, function(x){ return {name: "topic"}; },
      {select: function(thread, o){ return o._id == thread.topic._id }})(thread) %>
@@ -78,12 +78,12 @@ head.push('<link rel="alternate" type="application/rss+xml" title="'+content.HTM
 </div>
 
 <div id="editThreadDiv" style="display: none;">
-<fieldset class="dlg2"><legend>Edit Thread</legend>
+<fieldset class="dlg2"><legend>Edit <%= allowModule.forum.threadName %></legend>
 <form id="editThreadForm" action="thread_action">
 <input type="hidden" name="threadId" value="<%= thread._id %>">
 <input type="hidden" name="select" id="edit_select">
 <input type="hidden" name="action" value="edit">
-<div class="field">Closing a thread prevents users from posting replies.</div>
+<div class="field">Closing a <%= allowModule.forum.threadName.toLowerCase() %> prevents users from posting replies.</div>
 <div class="field"><label>Subject</label><input type="text" class="text" name="ttl" value="<%= content.HTML.escape(thread.getTitle()) %>"></div>
 <div class="field"><label></label><input type="checkbox" class="check" name="closed" <%= (threadClosed ? '"CHECKED"' : "") %>>Closed</div>
 <div class="btns"><input type="button" value="Edit" onclick="handleEditSubmit()" class="button"><input type="button" class="button" value="Cancel" onclick="handleCancel()"></div>
@@ -280,7 +280,7 @@ function toggleHighlight() {
 Forum.html.search(thread.topic.name);
 var caption_ar = [];
 if(Forum.Controller.hasPermission(user, "editThread")) {
-     caption_ar.push('<div class="button" onclick="document.getElementById(\'editThreadDiv\').style.display=\'block\';edit_d.render(document.body);edit_d.show()">Edit Thread</div>');
+    caption_ar.push('<div class="button" onclick="document.getElementById(\'editThreadDiv\').style.display=\'block\';edit_d.render(document.body);edit_d.show()">Edit '+allowModule.forum.threadName+'</div>');
 }
 if(request.show == "deleted"){
      caption_ar.push('<a href="'+url.removeArg("show")+'"><div class="button">Hide deleted</div></a>');

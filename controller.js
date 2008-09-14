@@ -148,6 +148,11 @@ Forum.Controller.getPermissions = function(user){
         return (Forum.Controller.unknownPermissions());
     }
 
+    // FIXME: using global request object here
+    if( db.banned_ips.findOne({ip: request.getRemoteIP()}) ){
+        return Forum.Controller.unknownPermissions();
+    }
+
     // if type == "MEMBER" we go to Forum.Controller.memberPermissions,
     // if type == "MODERATOR" we go to ...moderatorPermissions,
     // etc. So we do a lookup; use the type to find the right function, and call
