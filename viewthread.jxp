@@ -83,7 +83,7 @@ head.push('<link rel="alternate" type="application/rss+xml" title="'+content.HTM
 <input type="hidden" name="threadId" value="<%= thread._id %>">
 <input type="hidden" name="select" id="edit_select">
 <input type="hidden" name="action" value="edit">
-<div class="field">Closing a <%= allowModule.forum.threadName.toLowerCase() %> prevents users from posting replies.</div>
+<div class="field">Closing a <%= allowModule.forum.threadName.toLowerCase() %> prevents users from posting to it.</div>
 <div class="field"><label>Subject</label><input type="text" class="text" name="ttl" value="<%= content.HTML.escape(thread.getTitle()) %>"></div>
 <div class="field"><label></label><input type="checkbox" class="check" name="closed" <%= (threadClosed ? '"CHECKED"' : "") %>>Closed</div>
 <div class="btns"><input type="button" value="Edit" onclick="handleEditSubmit()" class="button"><input type="button" class="button" value="Cancel" onclick="handleCancel()"></div>

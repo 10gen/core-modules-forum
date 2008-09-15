@@ -366,8 +366,8 @@ Forum.html.form.postForm = function(shouldReturn){
 %>
     <div class="postForm" id="postForm">
          <form id="replyform">
-         <div class="field">Your Reply: </div><textarea id="ncontent" rows=10 name="ncontent"></textarea>
-         <div class="field"><input type="button" class="enewsbutton" onclick="post()" value="Submit Your Reply"></div>
+         <div class="field">Post to this thread: </div><textarea id="ncontent" rows=10 name="ncontent"></textarea>
+         <div class="field"><input type="button" class="enewsbutton" onclick="post()" value="Submit your post"></div>
          </form>
     </div>
 <%
