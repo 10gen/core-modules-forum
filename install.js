@@ -20,6 +20,7 @@ options.threadExpirationDays = Ext.getdefault(options, 'threadExpirationDays', 4
 options.needStatuses = Ext.getdefault(options, 'needStatuses', ['confirmed_email']);
 options.subtopics = Ext.getdefault(options, 'subtopics', true);
 options.threadName = Ext.getdefault(options, 'threadName', 'thread');
+options.allowSubtopics = Ext.getdefault(options, 'allowSubtopics', true);
 
 addModule('forum', options);
 

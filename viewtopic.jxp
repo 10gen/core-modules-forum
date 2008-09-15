@@ -87,7 +87,7 @@ Forum.html.topicBreadcrumb(t);
 
 print("<div style='float:right; '");
 var createThread = t.allowPosts;
-var createTopic = request.id != Forum.Controller.specialDeletedID && request.id != Forum.Controller.specialModeratedID;
+var createTopic = request.id != Forum.Controller.specialDeletedID && request.id != Forum.Controller.specialModeratedID && allowModule.forum.allowSubtopics;
 var editUser = true;
 Forum.root.html.caption();
 Forum.html.showCaption(createThread, createTopic, t._id, editUser);
