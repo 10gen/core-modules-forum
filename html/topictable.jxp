@@ -425,7 +425,10 @@ if(subs && subs.length > 0){
     var tableid = "table1";
     %>
     <table id="<%= tableid %>" class="style1">
-       <tr id="tr_header"><th class="alignleft"><%= (opts.thisid == null ? "Topic" : "Subtopic") %></th><th><%= allowModule.forum.threadName %>s</th><th>Posts</th>
+       <tr id="tr_header">
+         <th class="alignleft"><%= (opts.thisid == null ? "Topic" : "Subtopic") %></th>
+         <th><%= allowModule.forum.threadName %>s</th>
+         <% if(allowModule.forum.showTopicPostCount){ %><th>Posts</th><% } %>
        <%
        for(i=0; i < topicActions.length; i++) {
             print("<th>"+ topicActions[i].title +"</th>");

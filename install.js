@@ -16,11 +16,13 @@
 
 var options = arguments[0] || {};
 
+// FIXME: Bet I could combine all these getdefault calls into a single Object.extend
 options.threadExpirationDays = Ext.getdefault(options, 'threadExpirationDays', 45);
 options.needStatuses = Ext.getdefault(options, 'needStatuses', ['confirmed_email']);
 options.subtopics = Ext.getdefault(options, 'subtopics', true);
 options.threadName = Ext.getdefault(options, 'threadName', 'thread');
 options.allowSubtopics = Ext.getdefault(options, 'allowSubtopics', true);
+options.showTopicPostCount = Ext.getdefault(options, 'showTopicPostCount', false);
 
 addModule('forum', options);
 
