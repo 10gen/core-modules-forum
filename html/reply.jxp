@@ -29,6 +29,13 @@ options.even = ! options.even;
 var htmlclass = (options.htmlclass == null)? "": options.htmlclass(t);
 
 var prettyDate = t.ts.format("MMM d, yyyy h:mm")+t.ts.format("a").toLowerCase();
+var author = t.author;
+if( author ) author._id; // force resolve of DBRef
+if(! author) author = {
+    getDisplayName : function(){ return "(author unknown)"; },
+    hasPermission : function(){ return false; },
+    isAdmin : function(){ return false; }
+};
 %>
 
 
@@ -39,12 +46,12 @@ var prettyDate = t.ts.format("MMM d, yyyy h:mm")+t.ts.format("a").toLowerCase();
       </div>
 
       <div class="meta">
-<%= t.author.getDisplayName() %>
+<%= author.getDisplayName() %>
         <%
-        if(Forum.Controller.userPermissionType(t.author) == "ADMIN"){
+        if(Forum.Controller.userPermissionType(author) == "ADMIN"){
              print("(administrator)");
         }
-        else if(Forum.Controller.userPermissionType(t.author) == "MODERATOR"){
+        else if(Forum.Controller.userPermissionType(author) == "MODERATOR"){
              print("(moderator)");
         }
         %>
