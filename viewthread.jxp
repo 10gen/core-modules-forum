@@ -45,6 +45,7 @@ Forum.root.html.forumheader("Forum | "+titleStr + content.HTML.escape(thread.get
 // can't post if you don't have permissions, or if we're looking at
 // all the posts deleted from a thread.
 var canPost = Forum.Controller.canPost(thread) && thread.commentsEnabled && thread.postable();
+var cantPostWhy = thread.isExpired ? 'this thread is expired' : 'posting is disabled for this thread';
 var canSplit = Forum.Controller.hasPermission(user, "splitPost");
 var canDelete = Forum.Controller.hasPermission(user, "deletePost");
 var canModerate = Forum.Controller.hasPermission(user, "moderatePost");
@@ -405,6 +406,11 @@ function goToNewPost(response) {
 if(canPost){ %>
      <% Forum.html.form.postForm(); %>
      <%
+}
+        else {
+%>
+<div class="forum-cant-post-message">You cannot post to this thread because <%= cantPostWhy %>.</div>
+<%
 }
 %>
 </div>
