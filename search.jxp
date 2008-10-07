@@ -74,17 +74,17 @@ Forum.root.controller();
 Forum.root.html.forumheader("Forum | Search Results for \""+request.query+"\"");
 Forum.root.data.thread();
 Forum.root.html.form();
+Forum.root.data.paging();
 
 var query = request.query;
 
-threads = Search.search(db.forum.threads, query);
-Forum.root.data.paging();
-paging = new Forum.data.Paging(threads, {pageSize: 20, minWindow: 5},
+var threads = Search.search(db.forum.threads, query);
+var paging = new Forum.data.Paging(threads, {pageSize: 20, minWindow: 5},
                                    request);
-threads = paging.slice();
+var threads = paging.slice();
 Forum.root.html.paging(paging);
 
-cursor = Search.search(db.forum.topics, query );
+var cursor = Search.search(db.forum.topics, query );
 
 // Search bar
 Forum.html.search();
