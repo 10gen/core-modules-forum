@@ -157,7 +157,7 @@ if(threads.length > 0){ %>
                 var prettyDate = snippets[j].object.ts.format("MMM d, yyyy '<span class=''time''>' h:mm")+snippets[j].object.ts.format("a").toLowerCase() +"</span>";
                 %>
                 <div class="content">
-                  <div class="meta"><%= snippets[j].object.author.getDiplayName() %> on <%= prettyDate %></div></div>
+                  <div class="meta"><%= snippets[j].object.author ? snippets[j].object.author.getDisplayName() : '(author unknown)' %> on <%= prettyDate %></div></div>
                 <div class="snips">
                 <%
                 summary = summarize(snippets[j].text, query);
