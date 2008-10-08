@@ -32,7 +32,7 @@ var canModerate = Forum.Controller.hasPermission(user, "moderateThread");
 if(canPost){
     // see if we got a post
     var p = thread.decoratorsHandle();
-    if(p) {
+    if(p && ! p.failed) {
         thread.count ++;
         thread.topic.changeCounts(0, 1);
         thread.latestPost = p.getID();
@@ -46,6 +46,9 @@ if(canPost){
         opts = Forum.html.form.makePostOptions(canSplit, canDelete, canModerate, thread);
         opts.even = (request.even == "true") ? true : false;
         p.render(opts, thread.threaded_pieces);
+    }
+    if(p && p.failed){
+        print("<div class='error'>"+p.failed+"</div>");
     }
 }
 %>

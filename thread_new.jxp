@@ -34,7 +34,7 @@ else {
         var thread = new Forum.data.Thread();
         var rep = thread.decoratorsHandle();
 
-        if(rep){
+        if(rep && ! rep.failed){
             thread.topic = topic;
 
             thread.topic.addThread(1);
@@ -46,6 +46,11 @@ else {
             db.forum.topics.save(thread.topic);
             response.setResponseCode(301);
             response.setHeader("Location", "viewthread?id="+thread._id);
+            return;
+        }
+        if(rep && rep.failed){
+            print("<div class='error'>"+rep.failed+"</div>");
+            htmlfooter();
             return;
         }
     }

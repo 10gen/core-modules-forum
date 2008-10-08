@@ -285,6 +285,28 @@ Forum.data.Thread.list = function(topic){
     return db.forum.threads.find({topic: topic}).sort({pinned: -1, lastPostTime: -1});
 };
 
+Forum.data.Thread.prototype.validateReply = function(reply){
+    if(Ext.getlist(allowModule, 'forum', 'akismet', 'key')){
+        var a = new ws.akismet.Akismet(allowModule.forum.akismet.key,
+            allowModule.forum.akismet.uri);
+        var key = a.verifyKey();
+        if( ! key ){
+            reply.failed = "Checking the reply with Akismet failed: invalid key.";
+            return false;
+        }
+        var result = a.commentCheck( reply.ip, reply.useragent, reply.author_name , reply.content_unescaped, reply.author_email , reply.author_url );
+        if( ! result ){
+            if( allowModule.forum.akismet.failMessage ){
+                reply.failed = allowMoule.forum.akismet.failMessage;
+            }
+            else
+                reply.failed = "Your comment has been rejected as spam.";
+            return false;
+        }
+    }
+    return true;
+};
+
 db.forum.threads.setConstructor(Forum.data.Thread);
 
 db.forum.threads.ensureIndex({created : -1});

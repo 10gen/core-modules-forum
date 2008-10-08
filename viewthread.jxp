@@ -389,8 +389,14 @@ function goToNewPost(response) {
          alert("Post failed!");
 
      }
-     var page = response.substring(0, response.indexOf('&'));
-     var html = response.substring(response.indexOf('&')+1);
+    if(response.indexOf('&') == -1){
+        var page = <%= paging.pageNumber() %>;
+        var html = response;
+    }
+    else {
+        var page = response.substring(0, response.indexOf('&'));
+        var html = response.substring(response.indexOf('&')+1);
+    }
      if(page != <%= paging.pageNumber() %>)
           location = "viewthread?id=<%= thread._id %>&page=-1";
      else  {

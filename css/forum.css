@@ -73,6 +73,10 @@ div.breadcrumbs a, div.breadcrumbs a:visited {
 	font-size: 13px;
 }
 
+div.error {
+    color: #f00;
+}
+
 div.breadcrumbs a:hover {
 	text-decoration: underline;
 }
