@@ -287,6 +287,14 @@ Forum.data.Thread.list = function(topic){
 
 Forum.data.Thread.prototype.validateReply = function(reply){
     if(Ext.getlist(allowModule, 'forum', 'akismet', 'key')){
+        var fail = function(){
+            if( allowModule.forum.akismet.failMessage ){
+                reply.failed = allowMoule.forum.akismet.failMessage;
+            }
+            else
+                reply.failed = "Your comment has been rejected as spam.";
+            return false;
+        };
         var a = new ws.akismet.Akismet(allowModule.forum.akismet.key,
             allowModule.forum.akismet.uri);
         var key = a.verifyKey();
@@ -296,12 +304,15 @@ Forum.data.Thread.prototype.validateReply = function(reply){
         }
         var result = a.commentCheck( reply.ip, reply.useragent, reply.author_name , reply.content_unescaped, reply.author_email , reply.author_url );
         if( ! result ){
-            if( allowModule.forum.akismet.failMessage ){
-                reply.failed = allowMoule.forum.akismet.failMessage;
-            }
-            else
-                reply.failed = "Your comment has been rejected as spam.";
-            return false;
+            return fail();
+        }
+
+        if( reply.title ){
+            var a = new ws.akismet.Akismet(allowModule.forum.akismet.key,
+                allowModule.forum.akismet.uri);
+            var result = a.commentCheck( reply.ip, reply.useragent, reply.author_name , reply.title, reply.author_email , reply.author_url );
+            return fail();
+
         }
     }
     return true;
