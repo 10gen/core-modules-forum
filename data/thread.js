@@ -311,7 +311,8 @@ Forum.data.Thread.prototype.validateReply = function(reply){
             var a = new ws.akismet.Akismet(allowModule.forum.akismet.key,
                 allowModule.forum.akismet.uri);
             var result = a.commentCheck( reply.ip, reply.useragent, reply.author_name , reply.title, reply.author_email , reply.author_url );
-            return fail();
+            if( ! result )
+                return fail();
 
         }
     }
