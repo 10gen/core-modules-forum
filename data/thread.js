@@ -315,6 +315,8 @@ Forum.data.Thread.prototype.validateReply = function(reply){
                 return fail();
 
         }
+
+        reply.current_permissions = Forum.Controller.userPermissionType(reply.author);
     }
     return true;
 };
