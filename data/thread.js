@@ -325,6 +325,7 @@ db.forum.threads.ensureIndex({created : -1});
 db.forum.threads.ensureIndex({lastPostTime : -1});
 db.forum.threads.ensureIndex({pinned: 1});
 db.forum.threads.ensureIndex({pinned: 1, lastPostTime: 1});
+db.createCollection("forum.bad_posts", {size: 1000000, capped: true });
 core.db.dbutil();
 dbutil.associate(Forum.data.Thread, db.forum.threads);
 Search.fixTable(db.forum.threads, Forum.data.Thread.prototype.SEARCH_WEIGHTS);
